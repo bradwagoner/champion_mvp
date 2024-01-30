@@ -1,0 +1,14 @@
+<div class="flex flex-row align-items-start gap-2">
+  <ng-container *ngIf="(combinedBreakpoint | async)?.matches; else portraitLayout">
+    <app-joints-list class=""></app-joints-list>
+
+    <app-my-assessments class="flex-grow-1" *ngIf="!!(selectedJoint | async)"></app-my-assessments>
+  </ng-container>
+
+
+  <ng-template #portraitLayout>
+    <app-joints-list *ngIf="!(selectedJoint | async)"></app-joints-list>
+
+    <app-my-assessments class="flex-grow-1" *ngIf="!!(selectedJoint | async)"></app-my-assessments>
+  </ng-template>
+</div>

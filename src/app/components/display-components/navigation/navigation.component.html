@@ -1,0 +1,26 @@
+<div class="grid">
+  <p-button label="Home" routerLink="/home"
+            [link]="true"
+            class="col-3"
+  ></p-button>
+
+  <ng-container *ngIf="(isUserAuthenticated | async)">
+    <p-button label="{{(userProfileComplete | async) ? 'Profile' : 'Finish your Profile' }}" routerLink="/profile"
+              [link]="true"
+              class="col-3"
+    ></p-button>
+  </ng-container>
+
+  <ng-container *ngIf="((isUserAuthenticated | async) && (userProfileComplete | async))">
+    <p-button label="Screenings" routerLink="/screenings"
+              [link]="true"
+              class="col-3"
+    ></p-button>
+
+
+    <p-button label="Questionnaires" routerLink="/questionnaires"
+              [link]="true"
+              class="col-3"
+    ></p-button>
+  </ng-container>
+</div>

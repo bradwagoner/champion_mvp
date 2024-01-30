@@ -1,0 +1,12 @@
+<div #videoCanvasWrapper id="video-canvas-wrapper">
+  <!-- <video autoplay playsinline muted [width]="width" [height]="height" id="webcam" #video></video> -->
+  <webcam   [width]="width"
+            [height]="height"
+            [trigger]="getCaptureImageTrigger()"
+            [captureImageData]="true"
+            (imageCapture)="drawPose($event)"
+            id="webcam"
+  ></webcam>
+  <canvas #canvas [width]="width" [height]="height"></canvas>
+  <!-- <canvas #canvas [width]="videoCanvasWrapper.offsetWidth" [height]="videoCanvasWrapper.offsetHeight"></canvas> -->
+</div>

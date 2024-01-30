@@ -1,0 +1,12 @@
+<app-header></app-header>
+<app-navigation></app-navigation>
+
+<p-scrollPanel [style]="{ width: '100%', height: '100%' }"
+               class="align-self-center w-11 md:w-9 overflow-y-auto mb-1"
+               id="outlet-container">
+
+  <router-outlet></router-outlet>
+
+</p-scrollPanel>
+
+<app-footer></app-footer>

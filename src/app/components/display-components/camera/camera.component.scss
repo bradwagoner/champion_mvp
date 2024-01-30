@@ -1,0 +1,12 @@
+:host {
+  #video-canvas-wrapper {
+    padding: .25em;
+    position: relative;
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}

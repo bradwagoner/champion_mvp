@@ -1,0 +1,32 @@
+<div id="header" class="flex flex-row align-items-stretch justify-content-between border-bottom-1 py-1 px-3">
+
+  <div id="logoContainer" class="flex align-items-center h-3rem gap-2">
+    <img src="/favicon.ico" alt="image" class="h-2rem">
+    <strong id="data-page-heading" class="pageHeading">{{applicationTitle}}</strong>
+  </div>
+
+  <div id="loginContainer" class="flex align-items-center gap-2">
+    <span *ngIf="(isUserAuthenticated | async)"
+          class="navigation-link authenticated"
+    >
+      <span class="hidden sm:inline">
+        Welcome back {{ (authenticatedUser | async)?.givenName ? (authenticatedUser | async)?.givenName : ''}}
+      </span>
+      <p-button *ngIf="(isUserAuthenticated | async)"
+                (onClick)="logout()"
+                label="Logout"
+                size="small"
+      ></p-button>
+    </span>
+
+    <span *ngIf="!(isUserAuthenticated | async)"
+          class="navigation-link authenticated"
+    >
+      <p-button (onClick)="login()"
+                label="Login / Register"
+                size="small"
+      ></p-button>
+    </span>
+  </div>
+
+</div>

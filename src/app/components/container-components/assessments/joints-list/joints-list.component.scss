@@ -1,0 +1,20 @@
+:host {
+  display: flex;
+  border: solid green;
+  align-items: start;
+
+  flex-direction: column;
+
+  app-joint {
+    flex: 4;
+  }
+
+  .leftAndRight {
+    display: flex;
+    flex-direction: row;
+
+    app-joint {
+      flex: 2
+    }
+  }
+}

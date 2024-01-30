@@ -1,0 +1,42 @@
+<p-fieldset [legend]="(motion | enumToString | titlecase) || motion">
+  <div class="flex flex-column md:flex-row justify-content-between gap-4">
+    <div class="flex flex-row gap-4">
+      <p-knob [(ngModel)]="rangeOfMotion"
+              [min]=0
+              [max]=180
+              valueTemplate="{value}&deg;"
+              class="flex-1 flex-grow-0"
+      ></p-knob>
+
+
+      <p-image src="https://img.youtube.com/vi/yhX0GOfSkHU/1.jpg"
+               class="flex-1 flex-grow-0"
+      />
+    </div>
+
+    <div class="md:grid gap-3 flex flex-row md:flex-column">
+      <p-button *ngIf="rangeOfMotion && rangeOfMotion != assessment?.rangeOfMotion"
+                [label]="'Save'"
+                [icon]="PrimeIcons.SAVE"
+                severity="secondary"
+                (click)="saveManualRangeOfMotionSelection(rangeOfMotion)"
+                class="md:col-6"
+      ></p-button>
+
+      <p-button *ngIf="assessment"
+                [label]="'Delete'"
+                [icon]="PrimeIcons.TRASH"
+                severity="danger"
+                (click)="saveManualRangeOfMotionSelection(null)"
+                class="md:col-6"
+      ></p-button>
+
+      <p-button [label]="assessment ? 'Retake' : 'Take'"
+                [icon]="assessment ? PrimeIcons.REFRESH : PrimeIcons.ARROW_UP_RIGHT"
+                severity="primary"
+                (click)="handleMotionClick()"
+                class="md:col-6"
+      ></p-button>
+    </div>
+  </div>
+</p-fieldset>

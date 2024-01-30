@@ -1,0 +1,13 @@
+@import "primeng/resources/themes/nova/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+@import "../node_modules/primeflex/primeflex.css";
+
+html, body, app-root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+}

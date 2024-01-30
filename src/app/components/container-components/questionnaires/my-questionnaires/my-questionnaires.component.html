@@ -1,0 +1,27 @@
+<h3>Questionnaires</h3>
+
+<ng-container *ngIf="((questionnaires | async)?.length || 0) == 0">
+  <div>
+    Questionnaires are a grouping of exercise assessments FitNest will use to help you.
+    <br/>
+    It looks like you haven't completed any questionnaires yet.
+  </div>
+
+  <br/>
+
+  <div>
+    You can get started by completing the
+
+    <a [routerLink]="['/screenings']" [text]="'screenings'"></a>
+
+    for the area of your body that is bothering you.
+  </div>
+</ng-container>
+
+<div class="flex flex-1 flex-column gap-4">
+  <ng-container *ngFor="let questionnaire of (questionnaires | async)">
+    <app-questionnaire [questionnaire]="questionnaire"
+                       [assessments]="assessments | filterAssessmentsByIds:questionnaire.assessmentIds"
+    ></app-questionnaire>
+  </ng-container>
+</div>

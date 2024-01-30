@@ -1,0 +1,13 @@
+<div class="grid">
+  <div class="col-2 sm:col-1">
+    {{ (assessment | async)?.rangeOfMotion }}&deg;
+  </div>
+
+  <div class="col-5 md:col-3">
+    {{ (assessment | async)?.motion | enumToString | titlecase }}
+  </div>
+
+  <div class="col-2">
+    {{ (assessment | async)?.dateCreated | date:'MM/dd/yyyy' }}
+  </div>
+</div>

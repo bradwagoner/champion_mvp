@@ -1,0 +1,25 @@
+<div class="flex-1 flex-column gap-4">
+  <div class="flex justify-content-between align-items-center">
+    <h2>
+      {{ (selectedJoint | async | enumToString | titlecase) || "Select a Joint" }}
+    </h2>
+
+    <div class="flex flex-row gap-2">
+      <p-button (onClick)="completeAssessment()">
+        Complete Assessment
+      </p-button>
+
+      <p-button (onClick)="handleBackClick()">Back</p-button>
+    </div>
+  </div>
+  <ng-template #emptyTextTemplate>Select a Joint</ng-template>
+
+  <div *ngIf="nonNullSelectedJoint" class="flex flex-1 flex-column gap-3">
+    <app-motion *ngFor="let motion of (staticDataService.getMotionsForSelectedJoint() | async)"
+                [motion]="motion"
+                [joint]="nonNullSelectedJoint"
+                [assessment]="myAssessments | filterAssessmentsByJoint:nonNullSelectedJoint | filterAssessmentsByMotion:motion | mostRecentAssessment | async"
+                (motionSelection)="handleMotionSelection($event)"
+    ></app-motion>
+  </div>
+</div>

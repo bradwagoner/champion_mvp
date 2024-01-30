@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="RIGHT_KNEE" datatype="html">
+        <source>right knee</source>
+      </trans-unit>
+      <trans-unit id="LEFT_KNEE" datatype="html">
+        <source>left knee</source>
+      </trans-unit>
+      <trans-unit id="LEFT_SHOULDER" datatype="html">
+        <source>left shoulder</source>
+      </trans-unit>
+      <trans-unit id="RIGHT_SHOULDER" datatype="html">
+        <source>right shoulder</source>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

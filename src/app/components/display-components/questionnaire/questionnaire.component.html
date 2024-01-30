@@ -1,0 +1,41 @@
+<p-panel [toggleable]="true" [collapsed]="false">
+  <ng-template pTemplate="header">
+    <div class="flex flex-1 flex-row">
+      <span>{{ questionnaire.joint | enumToString | titlecase }}
+        - {{ questionnaire.dateCreated | date:'MM/dd/yyyy' }}</span>
+    </div>
+  </ng-template>
+
+  <div>
+    <div class="strong font-bold pb-1">Screenings</div>
+    <div *ngFor="let id of questionnaire.assessmentIds">
+      <app-assessment [assessment]="assessments | filterAssessmentsById:id"></app-assessment>
+    </div>
+
+    <p-divider></p-divider>
+
+    <div class="strong font-bold pb-1">Questionnaire Responses</div>
+    <div class="flex flex-column gap-2">
+      <div class="flex flex-row gap-4">
+        <span class="flex-shrink-0">{{ questionnaire.experiencedPain ? 'Yes' : 'No' }}</span>
+        <span class="flex-grow-0">{{ Messages.models.questionnaire.form.experiencedPain }}</span>
+      </div>
+      <div class="flex flex-row gap-4">
+        <span class="flex-shrink-0">{{ questionnaire.experiencedWeakness ? 'Yes' : 'No' }}</span>
+        <span class="flex-grow-0">{{ Messages.models.questionnaire.form.experiencedWeakness(questionnaire.joint) }}</span>
+      </div>
+      <div class="flex flex-row gap-4">
+        <span class="flex-shrink-0">{{ questionnaire.avoidedOrUnable ? 'Yes' : 'No' }}</span>
+        <span class="flex-grow-0">{{ Messages.models.questionnaire.form.avoidedOrUnable(questionnaire.joint) }}</span>
+      </div>
+      <div class="flex flex-row gap-4">
+        <span class="flex-shrink-0">{{ questionnaire.recentImprovement ? 'Yes' : 'No' }}</span>
+        <span class="flex-grow-0">{{ Messages.models.questionnaire.form.recentImprovement }}</span>
+      </div>
+      <div class="flex flex-row gap-4">
+        <span class="flex-shrink-0">{{ questionnaire.disruptsSleep ? 'Yes' : 'No' }}</span>
+        <span class="flex-grow-0">{{ Messages.models.questionnaire.form.disruptsSleep(questionnaire.joint) }}</span>
+      </div>
+    </div>
+  </div>
+</p-panel>

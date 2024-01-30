@@ -1,0 +1,24 @@
+version: 0.2
+env:
+  variables:
+    APP_NAME: "champion-mvp"
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20.x
+    commands:
+      - echo install process started
+      - npm install && npm install -g @angular/cli
+  build:
+    commands:
+      - echo build process started
+      - ng build --configuration=aws
+      - echo ng build success
+  post_build:
+    commands:
+      - echo build process finished
+      - ls -la
+      - ls -la ./dist
+      - ls -la ./dist/$APP_NAME
+      - ls -la ./dist/$APP_NAME/browser
+      # - aws s3 sync ./dist/$APP_NAME/browser s3:// --delete

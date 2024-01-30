@@ -1,0 +1,24 @@
+@import 'primeflex/primeflex.scss';
+
+:host {
+
+  .questionContainer {
+    // @include styleclass('flex flex-1 flex-row justify-content-between md:justify-content-start gap-4');
+    @include styleclass('grid border-left-2 border-primary-500');
+
+    border-left: var(--block-text-color) solid;
+
+    :first-child {
+      @include styleclass('col-10 md:col-8 lg:col-6 xl:col-5');
+    }
+
+    :last-child {
+      @include styleclass('col-2');
+    }
+
+    .optionsContainer {
+      @include styleclass('flex flex-column md:flex-row gap-2');
+    }
+  }
+
+}

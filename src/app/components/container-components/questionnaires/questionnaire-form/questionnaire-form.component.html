@@ -1,0 +1,101 @@
+<h3>{{ joint | async | enumToString | titlecase }} Screening Questionnaire</h3>
+
+<p>
+  To better provide the right assessment answer the following questions.
+</p>
+
+<form (ngSubmit)="saveQuestionnaire()" id="questionnaireForm" class="flex flex-1 flex-column gap-6 pt-3">
+  <div class="questionContainer border-left-2 border-primary-500 surface-overlay">
+    <span>{{Messages.models.questionnaire.form.experiencedPain}}</span>
+
+    <div class="optionsContainer">
+      <p-radioButton
+        [(ngModel)]="questionnaire.experiencedPain"
+        name="experiencedPain"
+        value=true
+        label="Yes"
+      ></p-radioButton>
+      <p-radioButton
+        [(ngModel)]="questionnaire.experiencedPain"
+        name="experiencedPain"
+         value=false
+        label="No"
+      ></p-radioButton>
+    </div>
+  </div>
+
+  <div class="questionContainer">
+    <span [innerText]="Messages.models.questionnaire.form.experiencedWeakness(joint | async)"></span>
+    <div class="optionsContainer">
+      <p-radioButton
+        [(ngModel)]="questionnaire.experiencedWeakness"
+        name="experiencedWeakness"
+        value=true
+        label="Yes"
+      ></p-radioButton>
+      <p-radioButton
+        [(ngModel)]="questionnaire.experiencedWeakness"
+        name="experiencedWeakness"
+         value=false
+        label="No"
+      ></p-radioButton>
+    </div>
+  </div>
+
+
+  <div class="questionContainer">
+    <span>{{Messages.models.questionnaire.form.avoidedOrUnable}}</span>
+    <div class="optionsContainer">
+      <p-radioButton
+        [(ngModel)]="questionnaire.avoidedOrUnable"
+        name="avoidedOrUnable"
+        value=true
+        label="Yes"
+      ></p-radioButton>
+      <p-radioButton
+        [(ngModel)]="questionnaire.avoidedOrUnable"
+        name="avoidedOrUnable"
+         value=false
+        label="No"
+      ></p-radioButton>
+    </div>
+  </div>
+
+  <div class="questionContainer">
+    <span>{{Messages.models.questionnaire.form.recentImprovement}}</span>
+    <div class="optionsContainer">
+      <p-radioButton
+        [(ngModel)]="questionnaire.recentImprovement"
+        name="recentImprovement"
+        value=true
+        label="Yes"
+      ></p-radioButton>
+      <p-radioButton
+        [(ngModel)]="questionnaire.recentImprovement"
+        name="recentImprovement"
+         value=false
+        label="No"
+      ></p-radioButton>
+    </div>
+  </div>
+
+  <div class="questionContainer">
+    <span>{{Messages.models.questionnaire.form.disruptsSleep}}</span>
+    <div class="optionsContainer">
+      <p-radioButton
+        [(ngModel)]="questionnaire.disruptsSleep"
+        name="disruptsSleep"
+        value=true
+        label="Yes"
+      ></p-radioButton>
+      <p-radioButton
+        [(ngModel)]="questionnaire.disruptsSleep"
+        name="disruptsSleep"
+         value=false
+        label="No"
+      ></p-radioButton>
+    </div>
+  </div>
+
+  <p-button class="btn btn-primary" type="submit">Submit</p-button>
+</form>
