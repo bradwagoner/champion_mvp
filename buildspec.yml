@@ -12,7 +12,7 @@ phases:
   build:
     commands:
       - echo build process started
-      - ng build --configuration=aws
+      - ng build --configuration=dev
       - echo ng build success
   post_build:
     commands:
