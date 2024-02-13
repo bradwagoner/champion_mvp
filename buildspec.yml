@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    APP_NAME: "champion-mvp"
+    APP_NAME: "champion-mvp-dev"
 phases:
   install:
     runtime-versions:
