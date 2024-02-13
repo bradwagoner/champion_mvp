@@ -4,7 +4,7 @@ import {Construct} from 'constructs';
 import {AttributeType, Billing, BillingMode, ProjectionType, Table, TableV2} from "aws-cdk-lib/aws-dynamodb";
 import {
     AuthorizationType,
-    AwsIntegration,
+    AwsIntegration, BasePathMapping,
     CognitoUserPoolsAuthorizer,
     Cors,
     IdentitySource,
@@ -55,6 +55,8 @@ import {
 import {Artifact, Pipeline} from "aws-cdk-lib/aws-codepipeline";
 import {BuildSpec, Project} from "aws-cdk-lib/aws-codebuild";
 import {CodeBuildProject} from "aws-cdk-lib/aws-events-targets";
+import {DomainName} from "aws-cdk-lib/aws-apigatewayv2";
+import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -97,8 +99,8 @@ export class CdkStack extends cdk.Stack {
         const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
         content.grantRead(originAccessIdentity);
 
+        /*
         const pipeline = new Pipeline(this, 'Dev Pipeline');
-
         const gitHubStage = pipeline.addStage({
             stageName: 'Deploy',
         });
@@ -132,7 +134,7 @@ export class CdkStack extends cdk.Stack {
 
         const project = new Project(this, 'FitNestProject', {
             role: codeBuildRole,
-            buildSpec: BuildSpec.fromAsset(path.resolve(__dirname, angularSourceDir))
+            buildSpec: BuildSpec.fromAsset(path.resolve(__dirname, '../../buildspec.yml')),
         });
 
         const buildAction = new CodeBuildAction({
@@ -142,6 +144,7 @@ export class CdkStack extends cdk.Stack {
         });
 
         buildStage.addAction(buildAction);
+        */
 
         /*
         let cloudFrontLoggingLambda: EdgeFunction = new EdgeFunction(this, 'CloudFront Logging Lamdba', {
@@ -151,6 +154,7 @@ export class CdkStack extends cdk.Stack {
         });
         */
 
+        // WORKING! - I think - disabled because re-create was failing on bucket errors.
         const logBucket = new Bucket(this, 'fit-nest-logs', {
             accessControl: BucketAccessControl.PRIVATE,
             objectOwnership: ObjectOwnership.OBJECT_WRITER,
@@ -176,6 +180,14 @@ export class CdkStack extends cdk.Stack {
           logGroup: fitNestLogGroup
         });
         */
+        const codeBuildRole = new Role(this, 'CodeBuildRole', {
+            assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),
+            // managedPolicies: [
+            // ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
+            // ManagedPolicy.fromAwsManagedPolicyName('CloudFrontFullAccess')
+            // ]
+        });
+        content.grantReadWrite(codeBuildRole);
 
         // cloudfront distribution for the angular code.
         let distrobution = new Distribution(this, 'Distribution', {
@@ -1073,8 +1085,15 @@ export class CdkStack extends cdk.Stack {
         /**
          * Route53
          */
-        // Route53
-
+        // const customDomain = new DomainName(this, 'FitNestFitnessDomainName', {
+        //     domainName: 'fitnest.fitness.com',
+        //     certificate: Certificate.fromCertificateArn(this, 'ACM_Certificate', '')
+        // });
+        //
+        // new BasePathMapping(this, 'FitNestFitnessBasePathMaping', {
+        //     domainName: customDomain,
+        //
+        // });
         /**
          * API Resource Definitions
          */
