@@ -3,9 +3,8 @@ import {PreloadAllModules, provideRouter, withPreloading} from '@angular/router'
 
 import {routes} from './app.routes';
 import {provideHttpClient, withFetch} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
-import {provideClientHydration} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MessageService} from "primeng/api";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +12,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     // provideClientHydration(),
     provideHttpClient(withFetch()),
-    {provide: CookieService, useClass: CookieService},
+    {provide: MessageService, useClass: MessageService},
   ]
 };

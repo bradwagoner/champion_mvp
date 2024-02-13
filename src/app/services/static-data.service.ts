@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, filter, map, Observable, tap, zip} from "rxjs";
-import {HttpClient} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
 import {Joint} from "../models/joint";
 import {Motion} from "../models/motion";
 import {MotionEnum} from "../models/ref/motion-enum";
@@ -25,7 +23,7 @@ export class StaticDataService {
 
     // private motions: BehaviorSubject<Motion[]> = new BehaviorSubject<Motion[]>(StaticDataService.STATIC_MOTIONS);
 
-    constructor(private httpClient: HttpClient, private cookieService: CookieService) {
+    constructor() {
         enum indexes {
             jointIndex,
             motionIndex,

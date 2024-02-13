@@ -4,7 +4,7 @@ import {Questionnaire} from "../models/questionnaire";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserService} from "./user.service";
-import {CookieService} from "ngx-cookie-service";
+import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,7 @@ export class QuestionnaireService {
 
   private myQuestionnairesBs: BehaviorSubject<Questionnaire[]> = new BehaviorSubject<Questionnaire[]>([] as Questionnaire[]);
 
-  constructor(public httpClient: HttpClient, public userService: UserService, private cookieService: CookieService) {
-    // let cachedQuestionnaires = this.cookieService.get('questionnaires');
+  constructor(public httpClient: HttpClient, public userService: UserService, public messageService: MessageService) {
     let cachedQuestionnaires = localStorage['questionnaires'];
     if (cachedQuestionnaires) {
       this.myQuestionnairesBs.next(JSON.parse(cachedQuestionnaires));
@@ -42,8 +41,8 @@ export class QuestionnaireService {
           headers: headers
         }).subscribe((mappedResponse: Questionnaire[]) => {
           console.log('fetchQuestionnaires Get subscribe callback: ', mappedResponse);
+
           this.myQuestionnairesBs.next(mappedResponse);
-          // this.cookieService.set('questionnaires', JSON.stringify(mappedResponse));
           localStorage['questionnaires'] = JSON.stringify(mappedResponse);
         });
       }
@@ -74,6 +73,12 @@ export class QuestionnaireService {
 
         this.httpClient.post<any>(url, body, options).subscribe((response: any) => {
           console.log("response!", response.ok, response);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Questionnaire saved successfully.',
+          })
 
           this.refreshMyQuestionnaires();
         });

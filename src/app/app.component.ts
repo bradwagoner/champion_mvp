@@ -6,11 +6,12 @@ import {FooterComponent} from "./components/footer/footer.component";
 import {UserService} from "./services/user.service";
 import {NavigationComponent} from "./components/display-components/navigation/navigation.component";
 import {ScrollPanelModule} from "primeng/scrollpanel";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, NavigationComponent, ScrollPanelModule],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, NavigationComponent, ScrollPanelModule, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

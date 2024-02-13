@@ -1,11 +1,11 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
 import {BehaviorSubject} from "rxjs";
 import {Assessment} from "../models/assessment";
 import {environment} from "../../environments/environment";
 import {take} from "rxjs/operators";
 import {Pose} from "@tensorflow-models/posenet";
+import {MessageService} from "primeng/api";
 
 @Injectable({
     providedIn: 'root'
@@ -18,10 +18,7 @@ export class AssessmentsService {
     private poseEmitter: EventEmitter<Pose> = new EventEmitter();
 
 
-    constructor(private httpClient: HttpClient,
-                private cookieService: CookieService,
-    ) {
-        // let cachedAssessments = this.cookieService.get('assessments');
+    constructor(private httpClient: HttpClient, public messageService: MessageService) {
         let cachedAssessments = localStorage['assessments'];
         if (cachedAssessments) {
             this.myAssessmentsBs.next(JSON.parse(cachedAssessments));
@@ -51,7 +48,17 @@ export class AssessmentsService {
         // let idToken = localStorage.getItem(environment.localJwtIdKey);
         // if (!idToken) return;
 
-        let idToken = this.cookieService.get(environment.localJwtIdKey);
+        let idToken = localStorage.getItem(environment.localJwtIdKey);
+        if (!idToken) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Something went wrong trying to save the screening.',
+                detail: 'It looks like you might not be logged in, try refreshing and retrying. Sorry for the inconvenience.',
+                sticky: true
+            });
+            return;
+        }
+
         let headers: HttpHeaders = new HttpHeaders({
             'Authorization': idToken,
         });
@@ -69,7 +76,19 @@ export class AssessmentsService {
     saveAssessment(assessment: Assessment) {
         let url = environment.cloudfrontDomain + '/api/assessments';
 
-        let idToken = this.cookieService.get(environment.localJwtIdKey);
+        let idToken = localStorage.getItem(environment.localJwtIdKey);
+
+        if (!idToken) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Something went wrong trying to save the screening.',
+                detail: 'It looks like you might not be logged in, try refreshing and retrying. Sorry for the inconvenience.',
+                sticky: true
+            });
+
+            return;
+        }
+
         let headers: HttpHeaders = new HttpHeaders().set('Authorization', idToken)
         const options = {
             headers: headers
@@ -86,6 +105,11 @@ export class AssessmentsService {
         this.httpClient.post<any>(url, body, options).subscribe((response: any) => {
             // console.log("response!", response.ok, response);
             // console.log('nexting assessment!:', assessment);
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Success',
+                detail: 'Screening saved successfully.'
+            });
             this.myAssessmentsBs.asObservable().pipe(take(1)).subscribe((assessments: Assessment[]) => {
                 this.fetchAssessments();
             });
