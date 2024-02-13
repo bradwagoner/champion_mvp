@@ -8,6 +8,7 @@ import {CognitoJwtVerifier} from "aws-jwt-verify";
 import {filter} from "rxjs/operators";
 import {formatDate} from "@angular/common";
 import {MessageService} from "primeng/api";
+import {LocalStorageService} from "./local-storage.service";
 
 
 @Injectable({
@@ -31,7 +32,7 @@ export class UserService {
         return this.userJwtExpiry.asObservable();
     }
 
-    constructor(private httpClient: HttpClient, public messageService: MessageService) {
+    constructor(private httpClient: HttpClient, public messageService: MessageService, public localStorageService: LocalStorageService) {
         this.cognitoIdVerifier = CognitoJwtVerifier.create({
             userPoolId: 'us-east-2_T2fTJGzBP',
             tokenUse: 'id',
@@ -46,7 +47,7 @@ export class UserService {
             filter((token) => !!token) // don't update user profile info if the token pushed is null
         ).subscribe(token => this.getUserProfileInfo(token));
 
-        let localToken = localStorage.getItem(environment.localJwtIdKey);
+        let localToken = this.localStorageService.getItem(environment.localJwtIdKey);
         if (localToken) {
             this.idToken.next(localToken);
         } else {
@@ -60,8 +61,8 @@ export class UserService {
         this.authenticationCode.next('');
         this.idToken.next(null);
         this.idToken.next(null);
-        localStorage.removeItem(environment.localJwtIdKey);
-        localStorage.removeItem(environment.localJwtAccessKey);
+        this.localStorageService.removeItem(environment.localJwtIdKey);
+        this.localStorageService.removeItem(environment.localJwtAccessKey);
     }
 
     public registerAuthenticationCode(code: string) {
@@ -97,18 +98,18 @@ export class UserService {
 
             if (response?.refresh_token) {
                 this.refreshToken.next(response.refresh_token);
-                localStorage.setItem(environment.localJwtRefreshKey, response.refresh_token);
+                // this.localStorageService.setItem(environment.localJwtRefreshKey, response.refresh_token);
             }
             if (response?.id_token) {
                 // console.log('jwtDecode(idToken):', jwtDecode(response.id_token));
                 this.idToken.next(response.id_token);
-                localStorage.setItem(environment.localJwtIdKey, response.id_token);
+                this.localStorageService.setItem(environment.localJwtIdKey, response.id_token);
             }
             if (response?.access_token) {
                 // console.log('jwtDecode(accessIdToken):', jwtDecode(response.id_token));
                 // console.log('pushing access token: ', this.localJwtIdKey, typeof response.access_token);
                 this.accessToken.next(response.access_token);
-                localStorage.setItem(environment.localJwtAccessKey, response.access_token);
+                this.localStorageService.setItem(environment.localJwtAccessKey, response.access_token);
                 // window.localStorage.setItem('teststorage', response.access_token);
                 // this.getUserInfoByAccessToken(response.access_token);
             }
@@ -174,9 +175,7 @@ export class UserService {
     }
 
     processRefreshToken() {
-        // console.log('convert code for jwt:', code);
-        let refreshToken = localStorage.getItem(environment.localJwtRefreshKey);
-        // let idToken = localStorage.get(environment.localJwtIdKey);
+        let refreshToken = this.localStorageService.getItem(environment.localJwtRefreshKey);
         if (!refreshToken) {
             return;
         }
@@ -198,13 +197,13 @@ export class UserService {
             if (response?.id_token) {
                 // console.log('jwtDecode(idToken):', jwtDecode(response.id_token));
                 this.idToken.next(response.id_token);
-                localStorage.setItem(environment.localJwtIdKey, response.id_token);
+                this.localStorageService.setItem(environment.localJwtIdKey, response.id_token);
             }
             if (response?.access_token) {
                 // console.log('jwtDecode(accessIdToken):', jwtDecode(response.id_token));
                 // console.log('pushing access token: ', this.localJwtIdKey, typeof response.access_token);
                 this.accessToken.next(response.access_token);
-                localStorage.setItem(environment.localJwtAccessKey, response.access_token);
+                this.localStorageService.setItem(environment.localJwtAccessKey, response.access_token);
             }
         });
     }
@@ -212,7 +211,7 @@ export class UserService {
     updateUser(user: User) {
         let url = environment.cloudfrontDomain + '/api/profile';
 
-        let idToken = localStorage.getItem(environment.localJwtIdKey);
+        let idToken = this.localStorageService.getItem(environment.localJwtIdKey);
         if (!idToken) {
             console.log('Failed to load idToken in updateUser');
             return;

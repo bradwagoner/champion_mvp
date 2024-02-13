@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserService} from "./user.service";
 import {MessageService} from "primeng/api";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class QuestionnaireService {
 
   private myQuestionnairesBs: BehaviorSubject<Questionnaire[]> = new BehaviorSubject<Questionnaire[]>([] as Questionnaire[]);
 
-  constructor(public httpClient: HttpClient, public userService: UserService, public messageService: MessageService) {
-    let cachedQuestionnaires = localStorage['questionnaires'];
+  constructor(public httpClient: HttpClient, public userService: UserService, public messageService: MessageService, public localStorageService: LocalStorageService) {
+    let cachedQuestionnaires = this.localStorageService.getItem('questionnaires');
     if (cachedQuestionnaires) {
       this.myQuestionnairesBs.next(JSON.parse(cachedQuestionnaires));
     }
@@ -43,7 +44,7 @@ export class QuestionnaireService {
           console.log('fetchQuestionnaires Get subscribe callback: ', mappedResponse);
 
           this.myQuestionnairesBs.next(mappedResponse);
-          localStorage['questionnaires'] = JSON.stringify(mappedResponse);
+          this.localStorageService.setItem('questionnaires', JSON.stringify(mappedResponse));
         });
       }
     });
