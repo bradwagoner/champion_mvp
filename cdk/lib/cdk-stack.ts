@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import {Duration, RemovalPolicy} from 'aws-cdk-lib';
+import {Duration, RemovalPolicy, SecretValue} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {AttributeType, Billing, BillingMode, ProjectionType, Table, TableV2} from "aws-cdk-lib/aws-dynamodb";
 import {
@@ -14,7 +14,7 @@ import {
     Model,
     RestApi
 } from "aws-cdk-lib/aws-apigateway";
-import {Effect, Policy, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
+import {Effect, ManagedPolicy, Policy, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {
     AccountRecovery,
     ClientAttributes,
@@ -46,6 +46,15 @@ import {LogGroup, RetentionDays} from "aws-cdk-lib/aws-logs";
 import {BucketDeployment, CacheControl, Source} from "aws-cdk-lib/aws-s3-deployment";
 import * as path from "path";
 import {IntegrationResponse} from "aws-cdk-lib/aws-apigateway/lib/integration";
+import {
+    CodeBuildAction,
+    CodeDeployServerDeployAction,
+    GitHubSourceAction,
+    GitHubTrigger, S3DeployAction
+} from "aws-cdk-lib/aws-codepipeline-actions";
+import {Artifact, Pipeline} from "aws-cdk-lib/aws-codepipeline";
+import {BuildSpec, Project} from "aws-cdk-lib/aws-codebuild";
+import {CodeBuildProject} from "aws-cdk-lib/aws-events-targets";
 
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -88,6 +97,51 @@ export class CdkStack extends cdk.Stack {
         const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
         content.grantRead(originAccessIdentity);
 
+        const pipeline = new Pipeline(this, 'Dev Pipeline');
+
+        const gitHubStage = pipeline.addStage({
+            stageName: 'Deploy',
+        });
+        const buildStage = pipeline.addStage({
+            stageName: 'FitNest-Built',
+            placement: {
+                justAfter: gitHubStage
+            }
+        });
+
+        const mainMergedOutput = new Artifact();
+        const action = new GitHubSourceAction({
+            actionName: 'GitHub_Main_Merge',
+            owner: 'bradwagoner',
+            repo: 'https://github.com/bradwagoner/champion_mvp.git',
+            oauthToken: SecretValue.secretsManager('fitnest-codedeploy-github-token'),
+            output: mainMergedOutput,
+            branch: 'main',
+        });
+
+        gitHubStage.addAction(action);
+
+
+        const codeBuildRole = new Role(this, 'CodeBuildRole', {
+            assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),
+            managedPolicies: [
+                ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
+                ManagedPolicy.fromAwsManagedPolicyName('CloudFrontFullAccess')
+            ]
+        });
+
+        const project = new Project(this, 'FitNestProject', {
+            role: codeBuildRole,
+            buildSpec: BuildSpec.fromAsset(path.resolve(__dirname, angularSourceDir))
+        });
+
+        const buildAction = new CodeBuildAction({
+            actionName: 'CodeBuild',
+            input: mainMergedOutput,
+            project: project,
+        });
+
+        buildStage.addAction(buildAction);
 
         /*
         let cloudFrontLoggingLambda: EdgeFunction = new EdgeFunction(this, 'CloudFront Logging Lamdba', {
