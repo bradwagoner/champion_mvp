@@ -5,7 +5,7 @@ import {FormsModule} from "@angular/forms";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {Questionnaire} from "../../../../models/questionnaire";
 import {QuestionnaireService} from "../../../../services/questionnaire.service";
-import {ActivatedRoute, RouterLink} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {SelectButtonModule} from "primeng/selectbutton";
 import {EnumToStringPipe} from "../../../../pipes/util/enum-to-titlecase.pipe";
 import {StaticDataService} from "../../../../services/static-data.service";
@@ -40,7 +40,8 @@ export class QuestionnaireFormComponent {
               public questionnaireService: QuestionnaireService,
               activatedRoute: ActivatedRoute,
               filterAssessmentsByJointPipe: FilterAssessmentsByJointPipe,
-              mostRecentAssessmentGroupedByMotionPipe: MostRecentAssessmentGroupedByMotionPipe
+              mostRecentAssessmentGroupedByMotionPipe: MostRecentAssessmentGroupedByMotionPipe,
+              public router: Router,
   ) {
     this.joint = staticDataService.getNotNullSelectedJoint();
 
@@ -71,13 +72,15 @@ export class QuestionnaireFormComponent {
     combineLatest([this.joint, this.mostRecentAssessmentsByMotion])
       .pipe(take(1))
       .subscribe(([joint, assessments]) => {
-        console.log('Fork Joined!', joint, assessments);
+        // console.log('Fork Joined!', joint, assessments);
         if (joint) {
           this.questionnaire.joint = joint;
           this.questionnaire.assessmentIds = assessments.map<string>(assessment => assessment.id);
 
-          console.log('saving!', this.questionnaire);
+          // console.log('saving!', this.questionnaire);
           this.questionnaireService.saveQuestionnaire(this.questionnaire);
+
+          this.router.navigate(['/questionnaires']);
         }
       });
   }

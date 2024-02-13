@@ -11,82 +11,98 @@ import {User} from "../../../app/models/user";
 import {InputTextModule} from "primeng/inputtext";
 import {URLSearchParams} from "url";
 import {HttpParams} from "@angular/common/http";
-import {filter} from "rxjs/operators";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {MenuItem, PrimeIcons} from "primeng/api";
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, FormsModule, ReactiveFormsModule, RouterModule, NavigationComponent, ButtonModule, InputTextModule],
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+    selector: 'app-header',
+    standalone: true,
+    imports: [CommonModule, RouterOutlet, FormsModule, ReactiveFormsModule, RouterModule, NavigationComponent, ButtonModule, InputTextModule, SplitButtonModule],
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
 
-  public applicationTitle: string = environment.applicationTitle;
-  public loginRoute = environment.cognitoIdpUrl + '/oauth2/authorize';
-  public logoutRoute = environment.cognitoIdpUrl + '/logout';
-  public testingEnvironment = environment.environmentName == 'Local';
+    public applicationTitle: string = environment.applicationTitle;
+    public loginRoute = environment.cognitoIdpUrl + '/oauth2/authorize';
+    public logoutRoute = environment.cognitoIdpUrl + '/logout';
+    public testingEnvironment = environment.environmentName == 'Local';
 
-  public loginLink: string = environment.cognitoIdpUrl;
+    public loginLink: string = environment.cognitoIdpUrl;
 
-  public isUserAuthenticated: Observable<boolean>;
-  public authenticatedUser: Observable<User | null>;
+    public isUserAuthenticated: Observable<boolean>;
+    public authenticatedUser: Observable<User | null>;
 
-  constructor(private userService: UserService) {
-    this.isUserAuthenticated = this.userService.getIsAuthenticatedObservable();
-    this.authenticatedUser = this.userService.getAuthenticatedUserObservable();
+    public menuItems: MenuItem[] = [
+        {label: 'Home', routerLink: ['/home']},
+        {label: 'Profile', routerLink: ['/profile']},
+        {label: 'Screenings', routerLink: ['/screenings']},
+        {label: 'Questionnaires', routerLink: ['/questionnaires']},
+        {separator: true},
+        {label: 'Logout', routerLink: ['/logout']},
+    ]
 
-    let loginParams = new HttpParams({
-      fromObject: {
-        client_id: environment.cognitoClientId,
-        response_type: 'code',
-        scope: environment.cognitoClientScopes,
-        redirect_uri: environment.cognitoCallbackUrl,
-      }
-    });
-    this.loginRoute += '?' + loginParams.toString();
+    constructor(private userService: UserService) {
+        this.isUserAuthenticated = this.userService.getIsAuthenticatedObservable();
+        this.authenticatedUser = this.userService.getAuthenticatedUserObservable();
 
-    let logoutParams = new HttpParams({
-      fromObject: {
-        client_id: environment.cognitoClientId,
-        // response_type: 'code',
-        // redirect_uri: environment.cognitoCallbackUrl,
-        logout_uri: environment.cognitoCallbackUrl,
-      }
-    });
+        let loginParams = new HttpParams({
+            fromObject: {
+                client_id: environment.cognitoClientId,
+                response_type: 'code',
+                scope: environment.cognitoClientScopes,
+                redirect_uri: environment.cognitoCallbackUrl,
+            }
+        });
+        this.loginRoute += '?' + loginParams.toString();
 
-    this.logoutRoute += '?' + logoutParams.toString();
-    return;
+        let logoutParams = new HttpParams({
+            fromObject: {
+                client_id: environment.cognitoClientId,
+                // response_type: 'code',
+                // redirect_uri: environment.cognitoCallbackUrl,
+                logout_uri: environment.cognitoCallbackUrl,
+            }
+        });
 
-    let paramssad = new URLSearchParams({
-      client_id: environment.cognitoClientId,
-      response_type: 'code',
-      scope: 'openid profile aws.cognito.signin.user.admin',
-      redirect_uri: environment.cognitoCallbackUrl
-    });
+        this.logoutRoute += '?' + logoutParams.toString();
+        return;
+
+        let paramssad = new URLSearchParams({
+            client_id: environment.cognitoClientId,
+            response_type: 'code',
+            scope: environment.cognitoClientScopes,
+            redirect_uri: environment.cognitoCallbackUrl
+        });
 
 
-    let separator: string = '?';
-    [
-      `client_id=${environment.cognitoClientId}`,
-      'response_type=code',
-      'scope=openid profile aws.cognito.signin.user.admin',
-      `redirect_uri=${environment.cognitoCallbackUrl}`
-    ].forEach(param => {
-      this.loginRoute += separator + param;
-      this.logoutRoute += separator + param;
-      separator = '&';
-    });
-  }
+        let separator: string = '?';
+        [
+            `client_id=${environment.cognitoClientId}`,
+            'response_type=code',
+            'scope=openid profile aws.cognito.signin.user.admin',
+            `redirect_uri=${environment.cognitoCallbackUrl}`
+        ].forEach(param => {
+            this.loginRoute += separator + param;
+            this.logoutRoute += separator + param;
+            separator = '&';
+        });
+    }
 
-  login() {
-    console.log('login route: ', this.loginRoute);
-    window.open(this.loginRoute, '_self');
-  }
+    login() {
+        console.log('login route: ', this.loginRoute);
+        window.open(this.loginRoute, '_self');
+    }
 
-  logout() {
-    console.log('logout route: ', this.logoutRoute);
-    this.userService.clearSession();
-    window.open(this.logoutRoute, '_self');
-  }
+    logout() {
+        console.log('logout route: ', this.logoutRoute);
+        this.userService.clearSession();
+        window.open(this.logoutRoute, '_self');
+    }
+
+    navHome() {
+        window.open('/home', '_self');
+    }
+
+    protected readonly PrimeIcons = PrimeIcons;
 }

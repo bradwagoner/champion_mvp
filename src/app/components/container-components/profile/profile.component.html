@@ -1,68 +1,84 @@
 <h3>Profile</h3>
 <form (ngSubmit)="submit()" id="header-loginform" class="flex flex-1 flex-column gap-6 pt-3 ml-1">
-  <div>
+    <div>
     <span class="p-float-label">
       <input
-        pInputText
-        [(ngModel)]="user.givenName"
-        id="givenName"
-        name="givenName"
-        type="text"
+              pInputText
+              [(ngModel)]="user.givenName"
+              id="givenName"
+              name="givenName"
+              type="text"
       >
       <label for="givenName">First Name</label>
     </span>
-  </div>
+    </div>
 
-  <div>
+    <div>
     <span class="p-float-label">
       <input
-        pInputText
-        [(ngModel)]="user.familyName"
-        id="familyName"
-        name="familyName"
+              pInputText
+              [(ngModel)]="user.familyName"
+              id="familyName"
+              name="familyName"
       >
       <label for="familyName">Last Name</label>
     </span>
-  </div>
+    </div>
 
-  <div>
+    <div>
     <span class="p-float-label">
       <p-calendar
-        [(ngModel)]="user.birthdate"
-        id="birthdate"
-        name="birthdate"
-        dateFormat="mm/dd/yy"
-        [readonlyInput]="true"
+              [(ngModel)]="user.birthdate"
+              id="birthdate"
+              name="birthdate"
+              dateFormat="mm/dd/yy"
+              [readonlyInput]="true"
       >
       </p-calendar>
       <label for="birthdate">Date of Birth</label>
     </span>
-  </div>
+    </div>
 
-  <div>
+    <div>
     <span class="p-float-label">
       <input
-        pInputText
-        [(ngModel)]="user.gender"
-        id="gender"
-        name="gender"
+              pInputText
+              [(ngModel)]="user.gender"
+              id="gender"
+              name="gender"
       >
       <label for="gender">Gender</label>
     </span>
-  </div>
+    </div>
 
-  <div>
+    <div>
     <span class="p-float-label">
       <p-inputMask
-        mask="99999"
-        placeholder="#####"
-        [(ngModel)]="user.zipcode"
-        id="zipcode"
-        name="zipcode"
+              mask="99999"
+              placeholder="#####"
+              [(ngModel)]="user.zipcode"
+              id="zipcode"
+              name="zipcode"
       ></p-inputMask>
       <label for="zipcode">Zip-Code</label>
     </span>
-  </div>
+    </div>
 
-  <p-button class="btn btn-primary" type="submit">Submit</p-button>
+    <div>
+    <span class="p-float-label">
+      <p-dropdown
+              [options]="insuranceCompanyOptions"
+              optionLabel="label"
+              optionValue="id"
+
+              emptyMessage="Select you Insurance"
+              [(ngModel)]="user.insurance"
+              id="insurance"
+              name="insurance"
+      ></p-dropdown>
+      <label for="insurance">Insurance</label>
+    </span>
+    </div>
+
+    <p-button class="btn btn-primary" type="submit">Submit</p-button>
 </form>

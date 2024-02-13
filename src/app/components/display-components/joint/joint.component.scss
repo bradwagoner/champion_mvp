@@ -1,9 +1,16 @@
+@import 'primeflex/primeflex.scss';
+
 :host {
-  border: aqua solid;
-  display: flex;
-
-  padding: 2em;
-  justify-content: center;
-
-  white-space: nowrap;
+  // @include styleclass('flex flex-1 ');
+  p-button {
+    // @include styleclass('p-2');
+    white-space: nowrap;
+  }
+  // border: aqua solid;
+  //display: flex;
+  //
+  //padding: 2em;
+  //justify-content: center;
+  //
+  //white-space: nowrap;
 }

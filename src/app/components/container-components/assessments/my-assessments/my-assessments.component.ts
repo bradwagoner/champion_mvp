@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {AsyncPipe, CommonModule} from '@angular/common';
+import {AsyncPipe, CommonModule, TitleCasePipe} from '@angular/common';
 import {AssessmentsService} from "../../../../services/assessments.service";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {Assessment} from "../../../../models/assessment";
 import {UserService} from "../../../../services/user.service";
 import {JointsListComponent} from "../joints-list/joints-list.component";
@@ -16,70 +16,101 @@ import {MotionEnum} from "../../../../models/ref/motion-enum";
 import {FilterAssessmentsByJointPipe} from "../../../../pipes/assessment/filter-assessments-by-joint.pipe";
 import {FilterAssessmentsByMotionPipe} from "../../../../pipes/assessment/filter-assessments-by-motion.pipe";
 import {MostRecentAssessment} from "../../../../pipes/assessment/most-recent-assessmentx.pipe";
+import {MenuItem, PrimeIcons} from "primeng/api";
+import {SplitButtonModule} from "primeng/splitbutton";
+import {OverlayPanelModule} from "primeng/overlaypanel";
+import {DialogModule} from "primeng/dialog";
+import {SafeResourceUrl} from "@angular/platform-browser";
 
 
 @Component({
-  selector: 'app-my-assessments',
-  standalone: true,
-  providers: [AsyncPipe],
-  imports: [CommonModule, JointsListComponent, MotionComponent, EnumToStringPipe, ButtonModule, FilterAssessmentsByJointPipe, FilterAssessmentsByMotionPipe, MostRecentAssessment],
-  templateUrl: './my-assessments.component.html',
-  styleUrl: './my-assessments.component.scss',
-  // providers: [UserService]
+    selector: 'app-my-assessments',
+    standalone: true,
+    providers: [AsyncPipe],
+    imports: [CommonModule, JointsListComponent, MotionComponent, EnumToStringPipe, ButtonModule, FilterAssessmentsByJointPipe, FilterAssessmentsByMotionPipe, MostRecentAssessment, SplitButtonModule, OverlayPanelModule, DialogModule],
+    templateUrl: './my-assessments.component.html',
+    styleUrl: './my-assessments.component.scss',
+    // providers: [UserService]
 })
 export class MyAssessmentsComponent {
 
-  private userService: UserService;
+    private userService: UserService;
 
-  public myAssessments: Observable<Assessment[]>;
+    public myAssessments: Observable<Assessment[]>;
 
-  public selectedJoint: Observable<JointEnum | null>;
-  public nonNullSelectedJoint: JointEnum;
+    public selectedJoint: Observable<JointEnum | null>;
+    public nonNullSelectedJoint: JointEnum;
 
-  constructor(public assessmenctService: AssessmentsService, userService: UserService, public staticDataService: StaticDataService, public router: Router, public activatedRoute: ActivatedRoute, asyncPipe: AsyncPipe) {
-    this.userService = userService;
-    this.myAssessments = assessmenctService.getMyAssessmentsAsObservable();
+    public enumToPipeString = new EnumToStringPipe();
+    public titleCasePipe = new TitleCasePipe();
 
-    this.selectedJoint = staticDataService.getSelectedJoint();
+    public visible: boolean = false;
+    public videoUrl: SafeResourceUrl | null = null;
 
-    assessmenctService.fetchAssessments();
+    constructor(public assessmenctService: AssessmentsService, userService: UserService, public staticDataService: StaticDataService, public router: Router, public activatedRoute: ActivatedRoute, asyncPipe: AsyncPipe) {
+        this.userService = userService;
+        this.myAssessments = assessmenctService.getMyAssessmentsAsObservable();
 
-    // todo ? should be filter/map into Observable<JointEnum> (sans null)
-    this.selectedJoint
-      .subscribe((joint) => {
-        if (joint) {
-          this.nonNullSelectedJoint = joint;
-        }
-      });
-  }
+        this.selectedJoint = staticDataService.getSelectedJoint();
 
-  handleBackClick() {
-    this.staticDataService.setSelectedJoint(null);
-    const params: Params = {joint: null};
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.activatedRoute,
-        queryParams: params,
-        queryParamsHandling: 'merge', // remove to replace all query params by provided
-      }
-    );
-  }
+        // assessmenctService.fetchAssessments();
 
-  handleMotionSelection(motion: MotionEnum) {
-    let assessment = new Assessment();
-    assessment.motion = motion;
-    assessment.joint = this.nonNullSelectedJoint;
-    this.assessmenctService.setInProgressAssessment(assessment);
+        // todo ? should be filter/map into Observable<JointEnum> (sans null)
+        this.selectedJoint
+            .subscribe((joint) => {
+                if (joint) {
+                    this.nonNullSelectedJoint = joint;
+                }
+            });
 
-    this.router.navigate(['take-assessment']);
-  }
+        activatedRoute.fragment.subscribe((fragment) => this.staticDataService.setSelectedJoint(fragment as JointEnum));
+    }
 
-  completeAssessment() {
-    this.router.navigate(['/questionnaireForm'], {
-      fragment: this.nonNullSelectedJoint
-    });
-  }
+    getJointButtonOptions(): MenuItem[] {
+        return Object.keys(JointEnum).map((joint) => {
+            return <MenuItem>{
+                label: this.titleCasePipe.transform(this.enumToPipeString.transform(joint)),
+            }
+        })
+    }
 
-  protected readonly select = select;
+    handleBackClick() {
+        this.staticDataService.setSelectedJoint(null);
+        const params: Params = {joint: null};
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams: params,
+                queryParamsHandling: 'merge', // remove to replace all query params by provided
+            }
+        );
+    }
+
+    handleMotionSelection(motion: MotionEnum) {
+        let assessment = new Assessment();
+        assessment.motion = motion;
+        assessment.joint = this.nonNullSelectedJoint;
+        this.assessmenctService.setInProgressAssessment(assessment);
+
+        this.router.navigate(['take-assessment']);
+    }
+
+    handlePlayVideo(videoUrl: SafeResourceUrl) {
+        console.log('HandlePlayVideo!', this.visible, videoUrl);
+
+        this.visible = true;
+        this.videoUrl = videoUrl;
+    }
+
+    completeAssessment() {
+        this.router.navigate(['/questionnaireForm'], {
+            fragment: this.nonNullSelectedJoint
+        });
+    }
+
+    protected readonly select = select;
+    protected readonly PrimeIcons = PrimeIcons;
+    protected readonly JointEnum = JointEnum;
+    protected readonly Object = Object;
 }

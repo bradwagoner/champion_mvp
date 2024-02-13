@@ -108,15 +108,17 @@
             "production": {
               "buildTarget": "champion-mvp:build:production"
             },
-            "aws": {
-              "buildTarget": "champion-mvp:build:aws"
+            "dev": {
+              "buildTarget": "champion-mvp:build:dev"
             },
             "local": {
-              "buildTarget": "champion-mvp:build:local"
+              "buildTarget": "champion-mvp:build:local",
             }
           },
           "options": {
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "src/proxy.conf.json",
+            "host": "192.168.6.99",
+            "ssl": true
           },
           "defaultConfiguration": "local"
         },
@@ -147,5 +149,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

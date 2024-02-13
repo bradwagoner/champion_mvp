@@ -25,7 +25,7 @@ export class MyQuestionnairesComponent {
 
   constructor(questionnairesService: QuestionnaireService, assessmentService: AssessmentsService) {
     this.questionnaires = questionnairesService.getMyQuestionnaires();
-    questionnairesService.refreshMyQuestionnaires();
+    // questionnairesService.refreshMyQuestionnaires();
 
     this.assessments = assessmentService.getMyAssessmentsAsObservable();
   }

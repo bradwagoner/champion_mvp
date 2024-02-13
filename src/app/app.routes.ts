@@ -15,6 +15,9 @@ import {
   QuestionnaireFormComponent
 } from "./components/container-components/questionnaires/questionnaire-form/questionnaire-form.component";
 import {ProfileComponent} from "./components/container-components/profile/profile.component";
+import {
+  MyAssessmentsComponent
+} from "./components/container-components/assessments/my-assessments/my-assessments.component";
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -22,10 +25,11 @@ export const routes: Routes = [
 
   {path: 'profile', component: ProfileComponent, canMatch: [isAuthenticatedGuard]},
 
-  {path: 'screenings', component: MyAssessmentsContainerComponent, canMatch: [isProfileCompletedGuard]},
-  {path: 'screenings/:joint', component: MyAssessmentsContainerComponent, canMatch: [isProfileCompletedGuard]},
+  {path: 'screenings', component: MyAssessmentsComponent, canMatch: [isProfileCompletedGuard]},
+  {path: 'screenings/:joint', component: MyAssessmentsComponent, canMatch: [isProfileCompletedGuard]},
 
   {path: 'take-assessment', component: TakeAssessmentComponent, canMatch: [isProfileCompletedGuard]},
+  {path: 'take-assessment/:joint', component: TakeAssessmentComponent, canMatch: [isProfileCompletedGuard]},
 
   {path: 'questionnaires', component: MyQuestionnairesComponent, canMatch: [isProfileCompletedGuard]},
   {path: 'questionnaireForm', component: QuestionnaireFormComponent, canMatch: [isProfileCompletedGuard]},

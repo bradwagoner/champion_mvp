@@ -5,7 +5,7 @@ This repository contains the code / libraries to build an AWS Serverless environ
 ## Building
 
 ### Build the Angular Application
-ng build --configuration=aws
+ng build --configuration=dev
 
 ### Building RUST Lambda Functions
 cargo lambda build -- Todo, this needs attention

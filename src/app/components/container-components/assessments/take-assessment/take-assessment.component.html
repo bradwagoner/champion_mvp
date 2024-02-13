@@ -1,29 +1,33 @@
 <div class="flex flex-column">
-  <h3>{{ inProgressAssessment.joint | enumToString | titlecase }}
-    - {{ inProgressAssessment.motion | enumToString | titlecase }}
-  </h3>
+    <h3>
+        {{ inProgressAssessment.joint | enumToString | titlecase }}
+        - {{ inProgressAssessment.motion | enumToString | titlecase }}
+    </h3>
 
-  <app-camera (keypointAngleTracked)="processAngleMeasurement($event)"
-              class="flex-grow-1"
-  ></app-camera>
+    <app-camera class="flex-grow-1"
+    ></app-camera>
 
-  <div class="flex flex-row gap-3 flex-wrap">
-  <span *ngFor="let keyValue of currentAngles | keyvalue">
-    <span>
-      {{ JointEnum[keyValue.key] | enumToString | titlecase }}
-    </span>
-    <span class="">
-      {{ keyValue.value | jointMeasurementToDegree | runningAverage:100 | runningAverage:100 | async | number:'1.0-0' }}{{ (keyValue.value | async) ? "\&deg;" : 'NO DEG' }}
-    </span>
-  </span>
-  </div>
 
-  <div *ngIf="assessmentJointMeasurement">
-    Raw: {{ assessmentJointMeasurement | jointMeasurementToDegree | async | number: "1.0-0" }}&deg;
-  </div>
-  <div *ngIf="assessmentJointMeasurement">
-    Running
-    Average: {{ assessmentJointMeasurement | jointMeasurementToDegree | runningAverage:100 | runningAverage:10 | async | number: "1.0-0" }}&deg;
-  </div>
+    <div>
+        <span style="font-2em;">{{ inProgressAssessment.joint | enumToString | titlecase }}</span>
+        <ng-container *ngFor="let measurement of (poses | convertPoseToJointMeasurements: inProgressAssessment.joint | async)">
+            <span style="font-size:2em;">{{ (measurement | jointMeasurementToDegree) | async | number: '2.2-2' }}</span>
+        </ng-container>
+    </div>
 
+    <!--
+    DEBUG!
+    <pre>{{ poses | async | json }}</pre>
+    ++
+    <pre>{{ currentAngles | json }}</pre>
+
+    <pre>{{ pose | json }}</pre>
+    <div *ngIf="assessmentJointMeasurement">
+        Raw: {{ assessmentJointMeasurement | jointMeasurementToDegree | async | number: "1.0-0" }}&deg;
+    </div>
+    <div *ngIf="assessmentJointMeasurement">
+        Running
+        Average: {{ assessmentJointMeasurement | jointMeasurementToDegree | runningAverage:100 | runningAverage:10 | async | number: "1.0-0" }}&deg;
+    </div>
+    -->
 </div>

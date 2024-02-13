@@ -1,25 +1,70 @@
 <div class="flex-1 flex-column gap-4">
-  <div class="flex justify-content-between align-items-center">
-    <h2>
-      {{ (selectedJoint | async | enumToString | titlecase) || "Select a Joint" }}
-    </h2>
+    <div class="flex justify-content-between align-items-center">
+        <!--
+        <h2>
+            {{ (selectedJoint | async | enumToString | titlecase) || "Select a Joint" }}
+        </h2>
+        -->
+        <p-splitButton label="{{ (selectedJoint | async | enumToString | titlecase) || 'Select a Joint' }}"
+                       class="text-4xl font-bold"
+                       styleClass="p-button-text p-button-lg text-4xl "
+                       (click)="jointsList.toggle($event)"
+        ></p-splitButton>
+        <p-overlayPanel #jointsList>
+            <ng-template pTemplate="content">
+                <app-joints-list (click)="jointsList.toggle($event)"></app-joints-list>
+            </ng-template>
+        </p-overlayPanel>
 
-    <div class="flex flex-row gap-2">
-      <p-button (onClick)="completeAssessment()">
-        Complete Assessment
-      </p-button>
+        <div class="flex flex-row md:hidden gap-2">
+            <!-- SPEEDDIAL / SPLITBUTTON -->
+            <!--
+            <p-button (onClick)="handleBackClick()"
+                      [icon]="PrimeIcons.ARROW_LEFT"
+            >
+            </p-button>
+            -->
 
-      <p-button (onClick)="handleBackClick()">Back</p-button>
+            <p-button (onClick)="completeAssessment()"
+                      [icon]="PrimeIcons.CHECK"
+            >
+            </p-button>
+        </div>
+        <div class="hidden md:flex flex-row gap-2">
+            <!--
+            <p-button (onClick)="handleBackClick()"
+            >
+                Back
+            </p-button>
+            -->
+
+            <p-button (onClick)="completeAssessment()"
+            >
+                Complete Assessment
+            </p-button>
+        </div>
+
     </div>
-  </div>
-  <ng-template #emptyTextTemplate>Select a Joint</ng-template>
+    <ng-template #emptyTextTemplate>Select a Joint</ng-template>
 
-  <div *ngIf="nonNullSelectedJoint" class="flex flex-1 flex-column gap-3">
-    <app-motion *ngFor="let motion of (staticDataService.getMotionsForSelectedJoint() | async)"
-                [motion]="motion"
-                [joint]="nonNullSelectedJoint"
-                [assessment]="myAssessments | filterAssessmentsByJoint:nonNullSelectedJoint | filterAssessmentsByMotion:motion | mostRecentAssessment | async"
-                (motionSelection)="handleMotionSelection($event)"
-    ></app-motion>
-  </div>
+    <div *ngIf="nonNullSelectedJoint" class="flex flex-1 flex-column gap-3">
+        <app-motion *ngFor="let motion of (staticDataService.getMotionsForSelectedJoint() | async)"
+                    [motion]="motion"
+                    [joint]="nonNullSelectedJoint"
+                    [assessment]="myAssessments | filterAssessmentsByJoint:nonNullSelectedJoint | filterAssessmentsByMotion:motion | mostRecentAssessment | async"
+                    (motionSelection)="handleMotionSelection($event)"
+                    (playVideo)="handlePlayVideo($event)"
+        ></app-motion>
+    </div>
+
+
+    <p-dialog [(visible)]="visible"
+              [modal]="true"
+              *ngIf="visible"
+              [resizable]="false"
+              [draggable]="false"
+              header="Screening Preview"
+    >
+        <iframe style="" [src]="videoUrl" allowfullscreen></iframe>
+    </p-dialog>
 </div>

@@ -1,20 +1,20 @@
+@import 'primeflex/primeflex.scss';
+
 :host {
-  display: flex;
-  border: solid green;
-  align-items: start;
+  @include styleclass('flex flex-column flex-grow-1 md:flex-grow-0 pt-3 pb-2');
 
-  flex-direction: column;
-
-  app-joint {
-    flex: 4;
-  }
-
-  .leftAndRight {
-    display: flex;
-    flex-direction: row;
+  * {
+    @include styleclass('flex flex-column align-items-center');
 
     app-joint {
-      flex: 2
+      @include styleclass('flex-grow-1');
     }
+
+    &.leftAndRight {
+      @include styleclass('flex-row');
+      app-joint {
+      }
+    }
+
   }
 }

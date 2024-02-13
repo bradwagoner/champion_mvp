@@ -7,13 +7,13 @@ import {RouterModule} from "@angular/router";
 import {environment} from "../../../../environments/environment";
 import {UserProfileCompletePipe} from "../../../pipes/user-profile-complete.pipe";
 import {isProfileCompletedGuard} from "../../../guards/is-user-profile-complete";
-import {DividerModule} from "primeng/divider";
 import {ButtonModule} from "primeng/button";
+import {TabMenuModule} from "primeng/tabmenu";
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, RouterModule, UserProfileCompletePipe, ButtonModule],
+    imports: [CommonModule, RouterModule, UserProfileCompletePipe, ButtonModule, TabMenuModule],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
 })

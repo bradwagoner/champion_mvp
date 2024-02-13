@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, map} from "rxjs";
 import {Questionnaire} from "../models/questionnaire";
 import {environment} from "../../environments/environment";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {take} from "rxjs/operators";
-import {Assessment} from "../models/assessment";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {UserService} from "./user.service";
+import {CookieService} from "ngx-cookie-service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +13,20 @@ export class QuestionnaireService {
 
   private myQuestionnairesBs: BehaviorSubject<Questionnaire[]> = new BehaviorSubject<Questionnaire[]>([] as Questionnaire[]);
 
-  constructor(public httpClient: HttpClient, public userService: UserService) {
+  constructor(public httpClient: HttpClient, public userService: UserService, private cookieService: CookieService) {
+    // let cachedQuestionnaires = this.cookieService.get('questionnaires');
+    let cachedQuestionnaires = localStorage['questionnaires'];
+    if (cachedQuestionnaires) {
+      this.myQuestionnairesBs.next(JSON.parse(cachedQuestionnaires));
+    }
   }
 
   getMyQuestionnaires() {
-    return this.myQuestionnairesBs.asObservable();
+    return this.myQuestionnairesBs.asObservable().pipe(
+        map(questionnaires => {
+          return questionnaires.sort((a, b) => a.dateCreated > b.dateCreated ? -1 : 1);
+        })
+    );
   }
 
   // untested
@@ -35,6 +43,8 @@ export class QuestionnaireService {
         }).subscribe((mappedResponse: Questionnaire[]) => {
           console.log('fetchQuestionnaires Get subscribe callback: ', mappedResponse);
           this.myQuestionnairesBs.next(mappedResponse);
+          // this.cookieService.set('questionnaires', JSON.stringify(mappedResponse));
+          localStorage['questionnaires'] = JSON.stringify(mappedResponse);
         });
       }
     });

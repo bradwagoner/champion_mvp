@@ -2,11 +2,12 @@ import {Component, EventEmitter, HostListener, Input, Output} from '@angular/cor
 import {CommonModule} from '@angular/common';
 import {JointEnum} from "../../../models/ref/joint-enum";
 import {EnumToStringPipe} from "../../../pipes/util/enum-to-titlecase.pipe";
+import {ButtonModule} from "primeng/button";
 
 @Component({
   selector: 'app-joint',
   standalone: true,
-  imports: [CommonModule, EnumToStringPipe],
+  imports: [CommonModule, EnumToStringPipe, ButtonModule],
   templateUrl: './joint.component.html',
   styleUrl: './joint.component.scss'
 })

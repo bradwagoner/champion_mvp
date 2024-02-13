@@ -1,12 +1,21 @@
 <div #videoCanvasWrapper id="video-canvas-wrapper">
-  <!-- <video autoplay playsinline muted [width]="width" [height]="height" id="webcam" #video></video> -->
-  <webcam   [width]="width"
+    <!-- <video autoplay playsinline muted [width]="width" [height]="height" id="webcam" #video></video> -->
+    <webcam [width]="width"
             [height]="height"
             [trigger]="getCaptureImageTrigger()"
             [captureImageData]="true"
-            (imageCapture)="drawPose($event)"
+            (imageCapture)="processWebcamImage($event)"
+            [videoOptions]="videoOptions"
+            [allowCameraSwitch]=true
             id="webcam"
-  ></webcam>
-  <canvas #canvas [width]="width" [height]="height"></canvas>
-  <!-- <canvas #canvas [width]="videoCanvasWrapper.offsetWidth" [height]="videoCanvasWrapper.offsetHeight"></canvas> -->
+    ></webcam>
+    <canvas #canvas [width]="width" [height]="height"></canvas>
+    <!-- <canvas #canvas [width]="videoCanvasWrapper.offsetWidth" [height]="videoCanvasWrapper.offsetHeight"></canvas> -->
+
+    <div class="flex flex-row gap-4">
+        <div *ngFor="let prediction of predictions" class="flex flex-column">
+            <span style="font-2em;">{{ prediction.className | titlecase }}</span>
+            <span style="font-size:2em;">{{ prediction.probability | number:'1.2-2' }}</span>
+        </div>
+    </div>
 </div>

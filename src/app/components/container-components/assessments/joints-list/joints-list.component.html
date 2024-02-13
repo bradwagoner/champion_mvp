@@ -1,41 +1,95 @@
-<!-- InputSwitch ToggleButton -->
-<div id="joints-menu">
-  <app-joint [joint]="JointEnum.CERVICAL"
-             (jointSelection)="handleJointSelection($event)">
-  </app-joint>
+<!--
+<div class="bg-blue-100">
+    Neck
+</div>
 
-  <div class="leftAndRight">
+<div class="leftAndRight bg-purple-100 align-items-end">
+    Shoulders
+
+    <p-selectButton [options]="leftRightOptions"></p-selectButton>
+</div>
+
+<div class="leftAndRight bg-orange-100 align-items-end">
+    Elbows
+
+    <p-selectButton [options]="leftRightOptions"></p-selectButton>
+</div>
+
+<div class="bg-yellow-100">
+    Lower Back
+</div>
+
+<div class="bg-blue-100">
+    Hips
+</div>
+
+<div class="leftAndRight bg-green-100 align-items-end">
+    Knee
+
+    <p-selectButton [options]="leftRightOptions"></p-selectButton>
+</div>
+
+-->
+
+<app-joint [joint]="JointEnum.CERVICAL"
+           (jointSelection)="handleJointSelection($event)"
+>
+</app-joint>
+
+<p-divider></p-divider>
+
+<div class="leftAndRight align-content-center"
+>
     <app-joint [joint]="JointEnum.LEFT_SHOULDER"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
+
+    <p-divider layout="vertical"></p-divider>
+
     <app-joint [joint]="JointEnum.RIGHT_SHOULDER"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
-  </div>
+</div>
 
-  <div class="leftAndRight">
+<p-divider></p-divider>
+
+<div class="leftAndRight"
+>
     <app-joint [joint]="JointEnum.LEFT_ELBOW"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
+
+    <p-divider layout="vertical"></p-divider>
+
     <app-joint [joint]="JointEnum.RIGHT_ELBOW"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
-  </div>
+</div>
 
-  <app-joint [joint]="JointEnum.LUMBAR"
-             (jointSelection)="handleJointSelection($event)">
-  </app-joint>
+<p-divider></p-divider>
 
-  <app-joint [joint]="JointEnum.HIP"
-             (jointSelection)="handleJointSelection($event)">
-  </app-joint>
+<app-joint [joint]="JointEnum.LUMBAR"
+           (jointSelection)="handleJointSelection($event)"
+>
+</app-joint>
 
-  <div class="leftAndRight">
+<p-divider></p-divider>
+
+<app-joint [joint]="JointEnum.HIP"
+           (jointSelection)="handleJointSelection($event)"
+>
+</app-joint>
+
+<p-divider ></p-divider>
+
+<div class="leftAndRight">
     <app-joint [joint]="JointEnum.LEFT_KNEE"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
+
+    <p-divider layout="vertical" class="flex-shrink-1 m-0 p-0"></p-divider>
+
     <app-joint [joint]="JointEnum.RIGHT_KNEE"
                (jointSelection)="handleJointSelection($event)">
     </app-joint>
-  </div>
 </div>
