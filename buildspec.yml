@@ -17,7 +17,7 @@ phases:
       - cdk synth
   post_build:
     commands:
-      - echo build process finished
+      - echo build process finished!
       - ls -la
       # - ls -la ./dist
       # - ls -la ./dist/$APP_NAME
