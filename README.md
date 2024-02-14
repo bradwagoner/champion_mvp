@@ -11,6 +11,7 @@ ng build --configuration=dev
 cargo lambda build -- Todo, this needs attention
 
 ### Building TS Lambda Functions
+Currently configured to happen in the synth process.
 
 ### Building/Synthing the CDK Project
 cdk synth --profile wagonercli --debug
