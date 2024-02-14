@@ -25,7 +25,7 @@ phases:
       - ls -la ./cdk.out/
       # - aws s3 sync ./dist/$APP_NAME/browser s3:// --delete
 artifacts:
-  name: 'FitNest NG'
+  name: 'FitNest-Ng'
   base-directory: './dist/$APP_NAME/browser'
     # secondary-artifacts:
     # cdk-template:
