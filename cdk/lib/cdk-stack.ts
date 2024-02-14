@@ -182,12 +182,12 @@ export class CdkStack extends cdk.Stack {
         */
         const codeBuildRole = new Role(this, 'CodeBuildRole', {
             assumedBy: new ServicePrincipal('codebuild.amazonaws.com'),
-            // managedPolicies: [
-            // ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
-            // ManagedPolicy.fromAwsManagedPolicyName('CloudFrontFullAccess')
-            // ]
+            managedPolicies: [
+                ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
+                ManagedPolicy.fromAwsManagedPolicyName('CloudFrontFullAccess')
+            ]
         });
-        content.grantReadWrite(codeBuildRole);
+        // content.grantReadWrite(codeBuildRole);
 
         // cloudfront distribution for the angular code.
         let distrobution = new Distribution(this, 'Distribution', {
@@ -1094,10 +1094,10 @@ export class CdkStack extends cdk.Stack {
         //     domainName: customDomain,
         //
         // });
+
         /**
          * API Resource Definitions
          */
-
         const apiGatewayResource = api.root.addResource('api');
 
         const allAssessmentsResource = apiGatewayResource.addResource('assessments');
