@@ -14,7 +14,7 @@ phases:
       - echo ng build process started
       - ng build --configuration=dev
       - echo ng build success
-      - cdk synth
+      - cdk synth --quiet
   post_build:
     commands:
       - echo build process finished!
