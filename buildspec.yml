@@ -18,7 +18,8 @@ phases:
     commands:
       - echo build process finished
       - ls -la
-      - ls -la ./dist
-      - ls -la ./dist/$APP_NAME
+      # - ls -la ./dist
+      # - ls -la ./dist/$APP_NAME
       - ls -la ./dist/$APP_NAME/browser
+      - ls -la ./cdk.out/
       # - aws s3 sync ./dist/$APP_NAME/browser s3:// --delete
