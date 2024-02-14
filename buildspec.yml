@@ -15,13 +15,6 @@ phases:
       - ng build --configuration=dev
       - echo ng build success
       - cdk synth
-  artifacts:
-    name: 'FitNest NG'
-    base-directory: './dist/$APP_NAME/browser'
-    secondary-artifacts:
-      cdk-template:
-        files:
-          - '/cdk.out/CdkStack.template.json'
   post_build:
     commands:
       - echo build process finished
@@ -31,3 +24,10 @@ phases:
       - ls -la ./dist/$APP_NAME/browser
       - ls -la ./cdk.out/
       # - aws s3 sync ./dist/$APP_NAME/browser s3:// --delete
+artifacts:
+  name: 'FitNest NG'
+  base-directory: './dist/$APP_NAME/browser'
+  secondary-artifacts:
+    cdk-template:
+      files:
+        - '/cdk.out/CdkStack.template.json'
