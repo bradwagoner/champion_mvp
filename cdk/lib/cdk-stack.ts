@@ -62,10 +62,10 @@ export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        const bootstrapVersion = new CfnParameter(this, 'BootstrapVersion', {
-            type: 'String',
-            description: 'This was provided/required by CloudFormation-Sync',
-        })
+        // const bootstrapVersion = new CfnParameter(this, 'BootstrapVersion', {
+        //     type: 'String',
+        //     description: 'This was provided/required by CloudFormation-Sync',
+        // })
 
         /*
          * CloudWatch
@@ -79,6 +79,7 @@ export class CdkStack extends cdk.Stack {
          */
         const content = new Bucket(this, 'fit-nest-content', {
             accessControl: BucketAccessControl.PRIVATE,
+
         });
 
         /*

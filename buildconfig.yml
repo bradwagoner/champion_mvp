@@ -1,4 +1,4 @@
 template-file-path: buildspec.yml
 parameters:
-  BootstrapVersion: /cdk-bootstrap/hnb659fds/version
+  # BootstrapVersion: /cdk-bootstrap/hnb659fds/version
 tags: {}
