@@ -27,7 +27,7 @@ phases:
 artifacts:
   name: 'FitNest NG'
   base-directory: './dist/$APP_NAME/browser'
-  secondary-artifacts:
-    cdk-template:
-      files:
-        - '/cdk.out/CdkStack.template.json'
+    # secondary-artifacts:
+    # cdk-template:
+    # files:
+  # - '/cdk.out/CdkStack.template.json'
