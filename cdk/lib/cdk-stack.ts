@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import {Duration, RemovalPolicy, SecretValue} from 'aws-cdk-lib';
+import {CfnParameter, Duration, RemovalPolicy, SecretValue} from 'aws-cdk-lib';
 import {Construct} from 'constructs';
 import {AttributeType, Billing, BillingMode, ProjectionType, Table, TableV2} from "aws-cdk-lib/aws-dynamodb";
 import {
@@ -61,6 +61,11 @@ import {Certificate} from "aws-cdk-lib/aws-certificatemanager";
 export class CdkStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
+
+        const bootstrapVersion = new CfnParameter(this, 'BootstrapVersion', {
+            type: 'String',
+            description: 'This was provided/required by CloudFormation-Sync',
+        })
 
         /*
          * CloudWatch
