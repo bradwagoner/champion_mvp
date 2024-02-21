@@ -1,26 +1,43 @@
 # Champion / FitNest MVP
-
 This repository contains the code / libraries to build an AWS Serverless environment that serves an Angular application and the infrastructure defined in the CDK package.
 
-## Building
+## Installing
+I use nvm, you can get node however you like. https://github.com/coreybutler/nvm-windows/releases
+> nvm install 20 \
+> nvm use 20 \
+> npm install --legacy-peer-deps  \
+> npm install -g @angular/cli  \
+> npm install aws-cdk -g  
 
+If you want to deploy to AWS you will also need the aws command line:
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+Hopefully this goes away as the CI solution matures.
+
+## Building
 ### Build the Angular Application
-ng build --configuration=dev
+Build configurations located in angular.json: projects.champion-mvp.architect.build.configurations
+> ng build --configuration=dev
 
 ### Building RUST Lambda Functions
-cargo lambda build -- Todo, this needs attention
+cargo lambda build -- TODO: this needs attention
 
 ### Building TS Lambda Functions
 Currently configured to happen in the synth process.
 
 ### Building/Synthing the CDK Project
-cdk synth --profile wagonercli --debug
+> cdk synth --profile wagonercli --debug
 
 
 ## Deploying
-aws sso login --profile wagonercli
-cdk deploy --profile wagonercli --debug --require-approval never
+>aws sso login --profile wagonercli
 
+>cdk deploy --profile wagonercli --debug --require-approval never
+
+
+## Serving Locally
+angular.json serve configuration specifies a host & ssl parameters. When developing against AWS your local ip address can be used when matched with the ip address supplied to cognito (currently in cdk-stack.ts).
+> ng serve
 
 
 <!--
