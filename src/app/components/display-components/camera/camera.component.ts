@@ -1,9 +1,6 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {WebcamImage, WebcamModule} from "ngx-webcam";
-import {Pose as PDPose, PoseDetector} from '@tensorflow-models/pose-detection';
-import {Pose} from '@tensorflow-models/posenet';
-import {LayersModel, Rank, ready, Tensor} from "@tensorflow/tfjs";
 import {BehaviorSubject} from "rxjs";
 import {CustomPoseNet, load} from "@teachablemachine/pose";
 import {AssessmentsService} from "../../../services/assessments.service";
@@ -19,7 +16,7 @@ import {ConvertPoseToJointMeasurements} from "../../../pipes/assessment/convert-
 export class CameraComponent implements OnInit, AfterViewInit {
     public loading = true;
 
-    public pose: PDPose;
+    // public pose: Pose;
 
     @ViewChild('canvas')
     public canvas: ElementRef<HTMLCanvasElement>;
@@ -36,14 +33,14 @@ export class CameraComponent implements OnInit, AfterViewInit {
 
     private captureImageTriggerBS: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
 
-    private poseDetector: PoseDetector;
+    // private poseDetector: PoseDetector;
 
     private context: CanvasRenderingContext2D | null;
 
-    private flrModel: LayersModel;
-    public tidyImage: Tensor<Rank>;
-
-    public tensors: Tensor<Rank>[] = [];
+    // private flrModel: LayersModel;
+    // public tidyImage: Tensor<Rank>;
+    //
+    // public tensors: Tensor<Rank>[] = [];
 
     public tmModel: CustomPoseNet;
 
@@ -61,7 +58,6 @@ export class CameraComponent implements OnInit, AfterViewInit {
     // ]);
 
 
-
     // private jointMeasurements: JointMeasurement[] = [
     //   {
     //     joint: JointEnum.LEFT_ELBOW,
@@ -77,11 +73,11 @@ export class CameraComponent implements OnInit, AfterViewInit {
         const modelLocation: string = '../../../../assets/tensorflow-models/front-side-model/model.json';
         const metadataLocation: string = '../../../../assets/tensorflow-models/front-side-model/metadata.json';
 
-        Promise.all([ready(), load(modelLocation, metadataLocation)]).then((value: [readyResp: void, loadedTmModel: any]) => {
+        load(modelLocation, metadataLocation).then((loadedTmModel) => {
             this.loading = false;
             console.log('PROMISE!', arguments);
 
-            this.tmModel = value[1];
+            this.tmModel = loadedTmModel;
 
             console.log('tmModel', this.tmModel);
             console.log('tmModel.model', this.tmModel?.model);
@@ -159,6 +155,8 @@ export class CameraComponent implements OnInit, AfterViewInit {
             return;
         }
 
+        console.log('DeterminingPose');
+
         this.tmModel
             .estimatePose(image.imageData)
             .then(this.processEstimatedPoses.bind(this))
@@ -174,11 +172,12 @@ export class CameraComponent implements OnInit, AfterViewInit {
     }
 
     processEstimatedPoses(poseEstimation: {
-        pose: Pose,
+        pose: any,
         posenetOutput: Float32Array
     }): void | PromiseLike<void> {
-        // console.log('CALLING processTmModelPoseEstimations.', arguments);
+        console.log('CALLING processTmModelPoseEstimations.', arguments);
         this.tmModel.predict(poseEstimation.posenetOutput).then(this.processPosePredictions.bind(this));
+        console.log('PREDICTED processTmModelPoseEstimations.', arguments);
         this.assessmentService.trackPose(poseEstimation.pose);
 
         // this.KEYPOINTS_TO_TRACK_ANGLES_FOR.forEach((value: ({

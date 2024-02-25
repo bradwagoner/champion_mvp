@@ -4,12 +4,13 @@ export const environment = {
 
   applicationTitle: 'FitNest',
 
-  cloudfrontDomain: 'https://d2v22ozo4qw858.cloudfront.net',
-  apiGatewayDomain: '',
-  cognitoIdpUrl: 'https://fit-nest-dev.auth.us-east-2.amazoncognito.com',
-  cognitoClientId: '7uqid3voipfovblm06fvst9g74',
+  cloudfrontDomain: 'https://fitnest.fitness',
+  apiGatewayDomain: '', // see proxy.conf.json
+  cognitoIdpUrl: 'https://idp.fitnest.fitness',
+  cognitoClientId: '6cjhfq6v1ba8j30vsu7t2a00fh',
+  cognitoUserPoolId: 'us-east-2_iaIgpJD0T',
   cognitoClientScopes: 'openid profile',
-  cognitoCallbackUrl: 'https://d2v22ozo4qw858.cloudfront.net',
+  cognitoCallbackUrl: 'https://fitnest.fitness',
   cognitoClientSecret: '',
 
   localJwtIdKey: 'champion-mvp-dev-jwt-id',

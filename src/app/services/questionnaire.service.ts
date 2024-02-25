@@ -38,7 +38,7 @@ export class QuestionnaireService {
         let headers: HttpHeaders = new HttpHeaders({
           'Authorization': token,
         });
-        this.httpClient.get<Questionnaire[]>(environment.cloudfrontDomain + '/api/questionnaires', {
+        this.httpClient.get<Questionnaire[]>(environment.apiGatewayDomain + '/api/questionnaires', {
           headers: headers
         }).subscribe((mappedResponse: Questionnaire[]) => {
           console.log('fetchQuestionnaires Get subscribe callback: ', mappedResponse);
@@ -53,7 +53,7 @@ export class QuestionnaireService {
   saveQuestionnaire(questionnaire: Questionnaire) {
     console.log('saving questionnaire: ', questionnaire);
 
-    let url = environment.cloudfrontDomain + '/api/questionnaires';
+    let url = environment.apiGatewayDomain + '/api/questionnaires';
 
     this.userService.getIdToken().subscribe((token) => {
       if (token) {

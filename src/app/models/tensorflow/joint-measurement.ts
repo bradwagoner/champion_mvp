@@ -1,5 +1,5 @@
-import {Keypoint} from "@tensorflow-models/posenet";
 import {JointEnum} from "../ref/joint-enum";
+import {Keypoint} from "@tensorflow-models/pose-detection";
 
 export class JointMeasurement {
     joint: JointEnum;

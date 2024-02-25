@@ -1,5 +1,5 @@
 <h3>Profile</h3>
-<form (ngSubmit)="submit()" id="header-loginform" class="flex flex-1 flex-column gap-6 pt-3 ml-1">
+<form (ngSubmit)="submit()" class="flex flex-1 flex-column gap-6 pt-3 ml-1 formgrid grid">
     <div>
     <span class="p-float-label">
       <input
@@ -33,6 +33,7 @@
               name="birthdate"
               dateFormat="mm/dd/yy"
               [readonlyInput]="true"
+              styleClass="w-full"
       >
       </p-calendar>
       <label for="birthdate">Date of Birth</label>
@@ -57,6 +58,7 @@
               mask="99999"
               placeholder="#####"
               [(ngModel)]="user.zipcode"
+              styleClass="w-full"
               id="zipcode"
               name="zipcode"
       ></p-inputMask>
@@ -65,18 +67,21 @@
     </div>
 
     <div>
-    <span class="p-float-label">
+    <span class="p-float-label flex flex-1">
       <p-dropdown
               [options]="insuranceCompanyOptions"
               optionLabel="label"
               optionValue="id"
 
-              emptyMessage="Select you Insurance"
+              placeholder="Select your Insurance"
               [(ngModel)]="user.insurance"
+              panelStyleClass='w-full'
+              styleClass='w-full'
+
               id="insurance"
               name="insurance"
       ></p-dropdown>
-      <label for="insurance">Insurance</label>
+      <label for="insurance">{{ user.insurance ? 'Insurance' : 'Select your Insurance' }}</label>
     </span>
     </div>
 

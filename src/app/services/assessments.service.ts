@@ -4,9 +4,9 @@ import {BehaviorSubject} from "rxjs";
 import {Assessment} from "../models/assessment";
 import {environment} from "../../environments/environment";
 import {take} from "rxjs/operators";
-import {Pose} from "@tensorflow-models/posenet";
 import {MessageService} from "primeng/api";
 import {LocalStorageService} from "./local-storage.service";
+import {Pose} from "@tensorflow-models/pose-detection";
 
 @Injectable({
     providedIn: 'root'
@@ -62,7 +62,7 @@ export class AssessmentsService {
         let headers: HttpHeaders = new HttpHeaders({
             'Authorization': idToken,
         });
-        this.httpClient.get<Assessment[]>(environment.cloudfrontDomain + '/api/assessments', {
+        this.httpClient.get<Assessment[]>(environment.apiGatewayDomain + '/api/assessments', {
             headers: headers
         }).subscribe((mappedResponse: Assessment[]) => {
             console.log('fetchAssessments Get subscribe callback: ', mappedResponse);
@@ -74,7 +74,7 @@ export class AssessmentsService {
 
 
     saveAssessment(assessment: Assessment) {
-        let url = environment.cloudfrontDomain + '/api/assessments';
+        let url = environment.apiGatewayDomain + '/api/assessments';
 
         let idToken = this.localStorageService.getItem(environment.localJwtIdKey);
 

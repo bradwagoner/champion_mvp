@@ -5,7 +5,7 @@ This repository contains the code / libraries to build an AWS Serverless environ
 I use nvm, you can get node however you like. https://github.com/coreybutler/nvm-windows/releases
 > nvm install 20 \
 > nvm use 20 \
-> npm install --legacy-peer-deps  \
+> npm install \
 > npm install -g @angular/cli  \
 > npm install aws-cdk -g  
 

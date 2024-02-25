@@ -11,8 +11,8 @@ import {JointEnum} from "../../../../models/ref/joint-enum";
 import {EnumToStringPipe} from "../../../../pipes/util/enum-to-titlecase.pipe";
 import {JointMeasurementToDegreePipe} from "../../../../pipes/assessment/joint-measurement-to-degree.pipe";
 import {Router} from "@angular/router";
-import {Pose} from "@tensorflow-models/posenet";
 import {ConvertPoseToJointMeasurements} from "../../../../pipes/assessment/convert-pose-to-joint-measurements";
+import {Pose} from "@tensorflow-models/pose-detection";
 
 @Component({
     selector: 'app-take-assessment',

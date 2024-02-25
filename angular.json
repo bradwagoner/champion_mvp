@@ -53,19 +53,15 @@
                   "maximumError": "4kb"
                 }
               ],
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.production.ts"
-                }
-              ]
+              "outputHashing": "all"
             },
             "dev": {
-              "optimization": false,
+              "optimization": true,
               "extractLicenses": false,
               "sourceMap": true,
               "outputPath": "dist/champion-mvp-dev",
+              "prerender": false,
+              "ssr": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -100,7 +96,7 @@
               ]
             }
           },
-          "defaultConfiguration": "aws"
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -112,7 +108,7 @@
               "buildTarget": "champion-mvp:build:dev"
             },
             "local": {
-              "buildTarget": "champion-mvp:build:local",
+              "buildTarget": "champion-mvp:build:local"
             }
           },
           "options": {

@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=194136998506:domainName=fitnest.fitness:region=us-east-2": {
+    "Id": "/hostedzone/Z07416882PCJI2D9WNPTU",
+    "Name": "fitnest.fitness."
+  },
+  "hosted-zone:account=194136998506:domainName=fitnest.fitness:region=us-east-1": {
+    "Id": "/hostedzone/Z07416882PCJI2D9WNPTU",
+    "Name": "fitnest.fitness."
+  }
+}

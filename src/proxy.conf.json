@@ -1,16 +1,6 @@
 {
-  "/logout": {
-    "target": "https://fit-nest-dev.auth.us-east-2.amazoncognito.com/logout",
-    "secure": false,
-    "pathRewrite": {"^/" : ""}
-  },
-  "/oauth2/userInfo/*": {
-    "target": "https://fit-nest-dev.auth.us-east-2.amazoncognito.com/oath2/userInfo/*",
-    "secure": false,
-    "pathRewrite": {"^/" : ""}
-  },
   "/api": {
-    "target": "https://d2v22ozo4qw858.cloudfront.net",
+    "target": "https://fitnest.fitness",
     "secure": false,
     "pathRewrite": {"^/" : ""},
     "changeOrigin": true

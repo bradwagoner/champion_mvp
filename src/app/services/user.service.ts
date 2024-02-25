@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, signal, Signal} from '@angular/core';
 import {BehaviorSubject, map, Observable, tap, zip} from "rxjs";
 import {User} from "../models/user";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -34,7 +34,7 @@ export class UserService {
 
     constructor(private httpClient: HttpClient, public messageService: MessageService, public localStorageService: LocalStorageService) {
         this.cognitoIdVerifier = CognitoJwtVerifier.create({
-            userPoolId: 'us-east-2_T2fTJGzBP',
+            userPoolId: environment.cognitoUserPoolId,
             tokenUse: 'id',
             clientId: environment.cognitoClientId,
             // scope: environment.cognitoClientScopes,
@@ -53,6 +53,12 @@ export class UserService {
         } else {
             console.log('no local token: auth setup complete.');
             this.initialAuthSetup.next(true);
+        }
+
+        let refreshToken = this.localStorageService.getItem(environment.localJwtRefreshKey);
+        if (refreshToken) {
+            this.refreshToken.next(refreshToken);
+            this.processRefreshToken();
         }
     }
 
@@ -98,7 +104,7 @@ export class UserService {
 
             if (response?.refresh_token) {
                 this.refreshToken.next(response.refresh_token);
-                // this.localStorageService.setItem(environment.localJwtRefreshKey, response.refresh_token);
+                this.localStorageService.setItem(environment.localJwtRefreshKey, response.refresh_token);
             }
             if (response?.id_token) {
                 // console.log('jwtDecode(idToken):', jwtDecode(response.id_token));
@@ -177,6 +183,7 @@ export class UserService {
     processRefreshToken() {
         let refreshToken = this.localStorageService.getItem(environment.localJwtRefreshKey);
         if (!refreshToken) {
+            console.log('NO REFRESH TOKEN!');
             return;
         }
 
@@ -192,7 +199,7 @@ export class UserService {
             headers: headers
         }
         this.httpClient.post<any>(url, body, options).subscribe(response => {
-            console.log('convertCodeForJwt response', response);
+            console.log('oauth2/token refresh response', response);
 
             if (response?.id_token) {
                 // console.log('jwtDecode(idToken):', jwtDecode(response.id_token));
@@ -209,7 +216,7 @@ export class UserService {
     }
 
     updateUser(user: User) {
-        let url = environment.cloudfrontDomain + '/api/profile';
+        let url = environment.apiGatewayDomain + '/api/profile';
 
         let idToken = this.localStorageService.getItem(environment.localJwtIdKey);
         if (!idToken) {

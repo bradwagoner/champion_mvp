@@ -2,8 +2,8 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {map, Observable} from "rxjs";
 import {JointEnum} from "../../models/ref/joint-enum";
 import {CocoKeypoints} from "../../models/tensorflow/coco-keypoints";
-import {Pose} from "@tensorflow-models/posenet";
 import {JointMeasurement} from "../../models/tensorflow/joint-measurement";
+import {Pose} from "@tensorflow-models/pose-detection";
 
 @Pipe({
     name: 'convertPoseToJointMeasurements',

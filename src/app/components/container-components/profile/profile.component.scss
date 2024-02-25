@@ -1,3 +1,11 @@
-:host {
+@import 'primeflex/primeflex.scss';
 
+:host {
+  form > div {
+    @include styleclass('col-3');
+
+    * {
+      @include styleclass('w-full');
+    }
+  }
 }

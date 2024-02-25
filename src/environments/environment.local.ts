@@ -6,8 +6,9 @@ export const environment = {
 
   cloudfrontDomain: 'https://192.168.6.99:4200',
   apiGatewayDomain: '',
-  cognitoIdpUrl: 'https://fit-nest-dev.auth.us-east-2.amazoncognito.com',
-  cognitoClientId: '7uqid3voipfovblm06fvst9g74',
+  cognitoIdpUrl: 'https://idp.fitnest.fitness',
+  cognitoClientId: '6cjhfq6v1ba8j30vsu7t2a00fh',
+  cognitoUserPoolId: 'us-east-2_iaIgpJD0T',
   cognitoClientScopes: 'openid profile',
   cognitoCallbackUrl: 'https://192.168.6.99:4200',
   cognitoClientSecret: '',
